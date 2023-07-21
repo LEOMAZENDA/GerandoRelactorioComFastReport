@@ -12,5 +12,6 @@
         public Int16 UnitsOnOrder { get; set; }
         public Int16 ReorderLevel { get; set; }
         public bool Discontinued { get; set; }
+        public Category? Category { get; set; }
     }
 }
