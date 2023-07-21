@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="07/21/2023 11:47:35" ReportInfo.Modified="07/21/2023 11:47:38" ReportInfo.CreatorVersion="2023.2.23.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="productList" ReferenceName="productList" DataType="System.Collections.Generic.List`1[[GerandoRelactorioComFastReport.Models.Product, GerandoRelactorioComFastReport, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]" Enabled="true">
+      <Column Name="ProductId" DataType="System.Int32"/>
+      <Column Name="ProductName" DataType="System.String"/>
+      <Column Name="SupplierId" DataType="System.Int32"/>
+      <Column Name="CategoryID" DataType="System.Int32"/>
+      <Column Name="QuantitityPerUbit" DataType="System.Int16"/>
+      <Column Name="UnitPrice" DataType="System.Decimal"/>
+      <Column Name="UnitsInStoque" DataType="System.Int16"/>
+      <Column Name="UnitsOnOrder" DataType="System.Int16"/>
+      <Column Name="ReorderLevel" DataType="System.Int16"/>
+      <Column Name="Discontinued" DataType="System.Boolean" BindableControl="CheckBox"/>
+    </BusinessObjectDataSource>
+  </Dictionary>
+</Report>
