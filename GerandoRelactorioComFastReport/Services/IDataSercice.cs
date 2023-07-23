@@ -2,8 +2,9 @@
 
 namespace GerandoRelactorioComFastReport.Services
 {
-    public interface IProductSercice
+    public interface IDataSercice
     {
         List<Product> GetProducts();
+        List<Category> GetCategories();
     }
 }

@@ -1,3 +1,4 @@
+using FastReport.Data;
 using GerandoRelactorioComFastReport.Context;
 using GerandoRelactorioComFastReport.Services;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,10 @@ var con = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(con));
 
+FastReport.Utils.RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+
 // Add interface and services implementation.
-builder.Services.AddScoped<IProductSercice, ProductService>();
+builder.Services.AddScoped<IDataSercice, DataSercice>();
 
 var app = builder.Build();
 
@@ -35,5 +38,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseFastReport();
 
 app.Run();

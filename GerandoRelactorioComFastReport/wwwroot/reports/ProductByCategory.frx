@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="07/23/2023 08:28:41" ReportInfo.Modified="07/23/2023 09:41:00" ReportInfo.CreatorVersion="2023.2.0.0">
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlq+rW0RkboK+/8CKGGYUID3ctBV8q9SvKYxl3iiE7vBnh7Tgou0+4WFf3NfmPSvHVFbrXgKpBHD/2P5X6c+SgoeVkSF5OFMxV2cKy4y1A1IAexClwhf4jKFqEzk3cpDS2FN83xWKnz6w07JdSqD6tC+RcUPsVGb33X7RYEXm459Y710rc2vLAGVukPu4qlMDcupHGxe8NxCO7ksdz06mLbKQ==">
+      <TableDataSource Name="Products" DataType="System.Int32" Enabled="true" TableName="Products">
+        <Column Name="ProductId" DataType="System.Int32"/>
+        <Column Name="ProductName" DataType="System.String"/>
+        <Column Name="SupplierId" DataType="System.Int32"/>
+        <Column Name="CategoryID" DataType="System.Int32"/>
+        <Column Name="QuantitityPerUbit" DataType="System.Int16"/>
+        <Column Name="UnitPrice" DataType="System.Decimal"/>
+        <Column Name="UnitsInStoque" DataType="System.Int16"/>
+        <Column Name="UnitsOnOrder" DataType="System.Int16"/>
+        <Column Name="ReorderLevel" DataType="System.Int16"/>
+        <Column Name="Discontinued" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+      <TableDataSource Name="Categories" DataType="System.Int32" Enabled="true" TableName="Categories">
+        <Column Name="CategoryId" DataType="System.Int32"/>
+        <Column Name="CategoryName" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="Picture" DataType="System.Byte[]" BindableControl="Picture"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+    <Relation Name="Categories_Products" ParentDataSource="Categories" ChildDataSource="Products" ParentColumns="CategoryId" ChildColumns="CategoryID" Enabled="true"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="47.25" Fill.Color="White">
+      <TextObject Name="Text4" Left="226.8" Top="9.45" Width="255.15" Height="28.35" Text="Products by Category" Font="Arial, 14pt, style=Bold"/>
+    </ReportTitleBand>
+    <DataBand Name="Data1" Top="49.25" Width="718.2" Height="37.8" Fill.Color="PaleTurquoise" StartNewPage="true" DataSource="Categories">
+      <TextObject Name="Text1" Left="18.9" Top="9.45" Width="264.6" Height="18.9" Text="[Categories.CategoryName]" Font="Arial, 14pt"/>
+      <TextObject Name="Text3" Left="321.3" Top="9.45" Width="179.55" Height="18.9" Text="[Categories.Description]" Font="Arial, 10pt"/>
+      <PictureObject Name="Picture1" Left="500.85" Width="56.7" Height="37.8" DataColumn="Categories.Picture"/>
+      <DataBand Name="Data2" Top="138.3" Width="718.2" Height="47.25" DataSource="Products">
+        <TextObject Name="Text5" Left="18.9" Top="9.45" Width="179.55" Height="18.9" Fill.Color="White" Text="[Products.ProductName]" Font="Arial, 10pt"/>
+        <TextObject Name="Text6" Left="264.6" Top="9.45" Width="179.55" Height="18.9" Fill.Color="White" Text="[Products.QuantitityPerUbit]" HorzAlign="Right" Font="Arial, 10pt"/>
+        <TextObject Name="Text8" Left="519.75" Top="9.45" Width="141.75" Height="18.9" Fill.Color="White" Text="[Products.UnitPrice]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
+        <DataHeaderBand Name="DataHeader1" Top="89.05" Width="718.2" Height="47.25" Fill.Color="LightGray">
+          <TextObject Name="Text2" Left="18.9" Top="18.9" Width="179.55" Height="18.9" Fill.Color="LightGray" Text="ProductName" Font="Arial, 10pt"/>
+          <TextObject Name="Text7" Left="264.6" Top="18.9" Width="179.55" Height="18.9" Fill.Color="LightGray" Text="QuantitityPerUbit" HorzAlign="Right" Font="Arial, 10pt"/>
+          <TextObject Name="Text9" Left="519.75" Top="18.9" Width="132.3" Height="18.9" Fill.Color="LightGray" Text="UnitPrice" HorzAlign="Right" Font="Arial, 10pt"/>
+        </DataHeaderBand>
+      </DataBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="187.55" Width="718.2" Height="18.9"/>
+  </ReportPage>
+</Report>

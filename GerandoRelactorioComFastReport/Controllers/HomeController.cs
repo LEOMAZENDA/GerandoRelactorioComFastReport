@@ -1,4 +1,6 @@
-﻿using FastReport.Export.PdfSimple;
+﻿using FastReport.Data;
+using FastReport.Export.PdfSimple;
+using FastReport.Web;
 using GerandoRelactorioComFastReport.Models;
 using GerandoRelactorioComFastReport.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +11,14 @@ namespace GerandoRelactorioComFastReport.Controllers
     public class HomeController : Controller
     {
         public readonly IWebHostEnvironment _webHostEnv;
-        private readonly IProductSercice _productService;
+        private readonly IDataSercice _dataService;
+        private IConfiguration _conficuration;
 
         public HomeController(IWebHostEnvironment webHostEnv,
-            IProductSercice productService)
+            IDataSercice productService)
         {
             _webHostEnv = webHostEnv;
-            _productService = productService;
+            _dataService = productService;
         }
 
         public IActionResult Index()
@@ -28,51 +31,60 @@ namespace GerandoRelactorioComFastReport.Controllers
             return View();
         }
 
-        [Route("CreateReport")]
-        public IActionResult CreateReport()
+
+        [Route("ProductsCategory")]
+        public IActionResult ProductsCategory()
         {
-            var caminhoReport = Path.Combine(_webHostEnv.WebRootPath, @"reports\ReportMvc.frx");
-            var reportFile = caminhoReport;
-            var freport = new FastReport.Report();
-            var productList = _productService.GetProducts();
+            //criamos uma instancia do objeto webreport
+            var webReport = new WebReport();
 
-            freport.Dictionary.RegisterBusinessObject(productList, "productList", 10, true);
-            freport.Report.Save(reportFile);
+            // Obtemos uma instância do objeto MsSqlDataConnection
+            // e definimos a string de conexão para o banco de dados nele
+            var mssqlDataConnection = new MsSqlDataConnection();
 
-            return Ok($" Relatorio gerado : {caminhoReport}");
+            webReport.Report.Dictionary.Connections.Add(mssqlDataConnection);
+
+            //carregamos o relatório criado na pasta reports
+            webReport.Report.Load(Path.Combine(_webHostEnv.ContentRootPath, "wwwroot/reports", "ProductByCategory.frx"));
+
+            //obtemos os dados para categorias e products
+            var categories = HelperFastReport.GetTable(_dataService.GetCategories(), "Categories");
+            var products = HelperFastReport.GetTable(_dataService.GetProducts(), "Products");
+
+            //registramos as fontes de dados 
+            webReport.Report.RegisterData(categories, "Categories");
+            webReport.Report.RegisterData(products, "Products");
+
+            //exibirmos o relatorio
+            return View(webReport);
         }
 
 
-        [Route("ProductsReport")]
-        public IActionResult ProductsReport()
+
+        [Route("ProductsCategoryPdf")]
+        public IActionResult ProductsCategoryPdf()
         {
-            var caminhoReport = Path.Combine(_webHostEnv.WebRootPath, @"reports\ReportMvc.frx");
-            var reportFile = caminhoReport;
-            var freport = new FastReport.Report();
-            var productList = _productService.GetProducts();
+            var webReport = new WebReport();
+            var mssqlDataConnection = new MsSqlDataConnection();
 
-            freport.Report.Load(reportFile);
-            freport.Dictionary.RegisterBusinessObject(productList, "productList", 10, true);
+            webReport.Report.Dictionary.Connections.Add(mssqlDataConnection);
+            webReport.Report.Load(Path.Combine(_webHostEnv.ContentRootPath, "wwwroot/reports", "ProductByCategory.frx"));
 
-            freport.Prepare();
+            var categories = HelperFastReport.GetTable(_dataService.GetCategories(), "Categories");
+            var products = HelperFastReport.GetTable(_dataService.GetProducts(), "Products");
 
-            var pdfExport = new PDFSimpleExport();
+            webReport.Report.RegisterData(categories, "Categories");
+            webReport.Report.RegisterData(products, "Products");
 
-            using MemoryStream ms = new MemoryStream();
+            webReport.Report.Prepare();
 
-            pdfExport.Export(freport, ms);
-            ms.Flush();
+            Stream stream = new MemoryStream();
+            webReport.Report.Export(new PDFSimpleExport(), stream);
+            stream.Position = 0;
 
-            return File(ms.ToArray(), "application/pdf");
-            //return Ok($"Relatorio gerado: {caminhoReport}");
+            // retorna o stream no navegador
+            return File(stream, "application/zip", "ProductsCategory.pdf");
+
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-
     }
 }

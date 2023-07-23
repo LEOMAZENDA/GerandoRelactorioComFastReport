@@ -1,0 +1,9 @@
+﻿@*<button asp-controller="Home" asp-action="Index" class="btn btn-secundary">voltar</button>*@
+
+@model FastReport.Web.WebReport
+
+@{
+    ViewData["Title"] = "Products by Categories - Report";
+}
+
+@await Model.Render()

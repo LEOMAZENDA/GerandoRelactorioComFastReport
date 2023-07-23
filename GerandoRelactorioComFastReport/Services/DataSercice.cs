@@ -3,13 +3,20 @@ using GerandoRelactorioComFastReport.Models;
 
 namespace GerandoRelactorioComFastReport.Services
 {
-    public class ProductService : IProductSercice
+    public class DataSercice : IDataSercice
     {
         private readonly AppDbContext _context;
 
-        public ProductService(AppDbContext context)
+        public DataSercice(AppDbContext context)
         {
             _context = context;
+        }
+
+        public List<Category> GetCategories()
+        {
+            var cat = _context.Categories.ToList();
+
+            return cat;
         }
 
         public List<Product> GetProducts()
